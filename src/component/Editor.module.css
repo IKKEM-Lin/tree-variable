@@ -1,0 +1,28 @@
+.editorWrapper {
+  position: relative;
+  height: 100%;
+}
+.validate {
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-top: 2px solid #666;
+}
+.validateDark {
+  background-color: #1e1e1e;
+  color: #fff;
+  border-top-color: #fff;
+}
+.saveBtn {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+.hidden {
+  display: none;
+  height: 0;
+}
+.darkBackgound {
+  background-color: #1e1e1e;
+}
