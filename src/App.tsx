@@ -8,6 +8,8 @@ import {
   Tooltip,
   Typography,
   Popconfirm,
+  Row,
+  Col,
 } from 'antd';
 import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import type { CollapseProps } from 'antd';
@@ -177,8 +179,17 @@ function App() {
 
   return (
     <Space direction="vertical">
-      <Typography.Title level={4} editable>{"Title"}</Typography.Title>
-        Description:
+      <Row align="bottom" justify="space-between">
+        <Col><Typography.Title level={4} editable>{"Title"}</Typography.Title></Col>
+        <Col>
+        <Space>
+          <Button type="primary">Save</Button>
+          <Button>Cancel</Button>
+          </Space>
+        </Col>
+      </Row>
+      
+      Description:
       <Input.TextArea rows={5} />
       <Space>
         Advance Mode:
@@ -202,12 +213,16 @@ function App() {
         {!advanceMode && environmentCode}
       </div>
       <Collapse accordion items={items} />
-      <Button
-        type="primary"
-        shape="circle"
-        icon={<PlusCircleOutlined />}
-        onClick={() => addItem()}
-      />
+      <Row justify="end">
+        <Tooltip title="Add new file">
+          <Button
+            type="primary"
+            shape="circle"
+            icon={<PlusCircleOutlined />}
+            onClick={() => addItem()}
+          />
+        </Tooltip>
+      </Row>
       {Object.values(itemsCode).join(' ')}
     </Space>
   );
