@@ -354,7 +354,8 @@ function App() {
           />
         </Tooltip>
       </Row>
-      {Object.values(itemsCode).join(' ')}
+      {/* {Object.values(itemsCode).join(' ')} */}
+      {JSON.stringify(environmentCode)}
     </Space>
   );
 }
