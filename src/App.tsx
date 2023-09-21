@@ -1,4 +1,4 @@
-import { useEffect, useState, FC } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Switch,
   Collapse,
@@ -7,177 +7,21 @@ import {
   Space,
   Tooltip,
   Typography,
-  Popconfirm,
   Row,
   Col,
-  Tree,
-  Select,
 } from 'antd';
-import { PlusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import type { CollapseProps } from 'antd';
-import type { DataNode } from 'antd/es/tree';
 import { Editor } from './component/Editor';
-import './App.css';
-
-interface IEnvironment {
-  name: string;
-  type: string;
-  value: string | IEnvironment[];
-}
-
-const NestedForm: FC<{
-  data: IEnvironment[];
-  onChange: (newData: IEnvironment[]) => void;
-}> = ({ data, onChange }) => {
-  const renderTreeData: (items: IEnvironment[], offset: number) => DataNode[] =
-    (items, offset) => {
-      return items.map((item, ind) => {
-        return {
-          key: `${offset}-${ind}`,
-          title: (
-            <Row gutter={8}>
-              <Col span={4}>
-                <Input
-                  value={item.name}
-                  placeholder="Name"
-                  disabled={offset > 0}
-                  onChange={(e) => {
-                    item.name = e.target.value;
-                    onChange([...data]);
-                  }}
-                />
-              </Col>
-              <Col span={6}>
-                <Select
-                  value={item.type}
-                  style={{ width: '100%' }}
-                  onChange={(val) => {
-                    item.type = val;
-                    item.value = '';
-                    onChange([...data]);
-                  }}
-                  disabled={offset > 0}
-                  options={[
-                    { value: 'constant', label: 'constant' },
-                    { value: 'ref', label: 'ref' },
-                    { value: 'path', label: 'path' },
-                  ]}
-                />
-              </Col>
-              {!Array.isArray(item.value) && (
-                <Col span={8}>
-                  <Input
-                    value={item.value}
-                    onChange={(e) => {
-                      item.value = e.target.value;
-                      onChange([...data]);
-                    }}
-                  />
-                </Col>
-              )}
-              {offset === 0 && (
-                <Col span={2}>
-                  <DeleteButton
-                    onConfirm={() => onChange((data.splice(ind, 1), [...data]))}
-                  />
-                </Col>
-              )}
-            </Row>
-          ),
-          children:
-            (Array.isArray(item.value) &&
-              renderTreeData(item.value, offset + 1)) ||
-            [],
-        };
-      });
-    };
-  const treeData: DataNode[] = renderTreeData(data, 0);
-
-  return (
-    <>
-      <Row gutter={8} align="bottom">
-        <Col span={4} offset={1}>
-          <Typography.Title level={5}>Name</Typography.Title>
-        </Col>
-        <Col span={6}>
-          <Typography.Title level={5}>Type</Typography.Title>
-        </Col>
-        <Col span={8}>
-          <Typography.Title level={5}>Value</Typography.Title>
-        </Col>
-        <Col style={{ textAlign: 'right' }} span={5}>
-          <Tooltip title="Add new variable">
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<PlusCircleOutlined />}
-              size="small"
-              style={{ marginBottom: '8px' }}
-              onClick={() =>
-                onChange([...data, { name: '', type: 'constant', value: '' }])
-              }
-            />
-          </Tooltip>
-        </Col>
-      </Row>
-      <Tree showLine showIcon treeData={treeData} blockNode defaultExpandAll />
-    </>
-  );
-};
-
-const DeleteButton: FC<{ onConfirm: (evt: any) => void }> = ({ onConfirm }) => {
-  return (
-    <Popconfirm
-      title="Delete the file"
-      description="Are you sure to delete this file?"
-      onConfirm={onConfirm}
-      onCancel={(evt) => evt?.stopPropagation()}
-      okText="Yes"
-      cancelText="No"
-    >
-      <Button
-        // type="second"
-        danger
-        shape="circle"
-        icon={<DeleteOutlined color="#a00" />}
-        onClick={(evt) => {
-          evt?.stopPropagation();
-        }}
-      ></Button>
-    </Popconfirm>
-  );
-};
-
-async function getData() {
-  const res = [
-    {
-      fileName: 'file1.json',
-      code: 'uerwexcnlasfe',
-      enviroment: [{ name: 'v1', type: 'constant', value: '123' }],
-    },
-    {
-      fileName: 'file2.json',
-      code: 'asdfwegfd123',
-      enviroment: [
-        {
-          name: 'v2',
-          type: 'ref',
-          value: [{ name: 'v3', type: 'path', value: './local/temp.dump' }],
-        },
-      ],
-    },
-    {
-      fileName: 'file3.json',
-      code: '1231241vasdfa',
-      enviroment: [{ name: 'v3', type: 'path', value: './local/temp.dump' }],
-    },
-  ];
-  return res;
-}
+import { DeleteButton } from './component/DeleteButton';
+import { NestedForm, IEnvironment, IListItem } from './component/NestedForm';
+import { getList, getDetail } from './service';
+import { MoveableContainer } from './component/MoveableContainer/MoveableContainer';
 
 const cache: any = {};
 
 function App() {
+  const [refList, setRefList] = useState<IListItem[]>([]);
   const [environmentCode, setEnvironmentCode] = useState<IEnvironment[]>([]);
   const [environmentValidate, setEnvironmentValidate] = useState(false);
   const [advanceMode, setAdvanceMode] = useState(false);
@@ -206,10 +50,13 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    getData().then((res) => {
-      const newEnviroment: any[] = res.flatMap((item) => item.enviroment || []);
+    getList().then((res) => {
+      setRefList(res);
+    });
+    getDetail().then(({ files, enviroments }) => {
+      const newEnviroment: IEnvironment[] = enviroments;
       const newItemsCode: any = {};
-      const data = res.map((item) => {
+      const data = files.map((item) => {
         const key = `${Math.random()}`;
         newItemsCode[key] = item.code;
         return {
@@ -295,68 +142,81 @@ function App() {
   }
 
   return (
-    <Space direction="vertical" style={{ maxWidth: '1200px' }}>
-      <Row align="bottom" justify="space-between">
-        <Col>
-          <Typography.Title level={4} editable>
-            {'Title'}
-          </Typography.Title>
-        </Col>
-        <Col>
-          <Space>
-            <Button type="primary">Save</Button>
-            <Button>Cancel</Button>
-          </Space>
-        </Col>
-      </Row>
-      Description:
-      <Input.TextArea rows={5} />
-      <Space>
-        Advance Mode:
-        <Switch
-          checked={advanceMode}
-          onChange={(checked) => setAdvanceMode(checked)}
-        />
+    <>
+      <Space direction="vertical" style={{ maxWidth: '1200px', width: '90vw' }}>
+        <Row align="bottom" justify="space-between">
+          <Col>
+            <Typography.Title level={4} editable>
+              {'Title'}
+            </Typography.Title>
+          </Col>
+          <Col>
+            <Space>
+              <Button type="primary">Save</Button>
+              <Button>Cancel</Button>
+            </Space>
+          </Col>
+        </Row>
+        Description:
+        <Input.TextArea rows={5} />
+        <div style={{ height: '80vh', width: '100%' }}>
+          <MoveableContainer direction="col" defaultPosition={30}>
+            <div style={{ height: 'calc(100% - 24px)' }}>
+              <Space>
+                Advance Mode:
+                <Switch
+                  checked={advanceMode}
+                  onChange={(checked) => setAdvanceMode(checked)}
+                />
+              </Space>
+              <div style={{ height: '100%' }}>
+                <div style={{ height: '100%' }} hidden={!advanceMode}>
+                  {advanceMode && environmentCode && (
+                    <Editor
+                      code={JSON.stringify(environmentCode, null, 2)}
+                      isDark={true}
+                      language="json"
+                      onChange={(newCode, validate) => {
+                        setEnvironmentValidate(validate);
+                        setEnvironmentCode(JSON.parse(newCode));
+                      }}
+                    />
+                  )}
+                </div>
+                <div
+                  style={{ height: '100%', overflowY: 'auto', width: '100%' }}
+                >
+                  {!advanceMode && (
+                    <NestedForm
+                      data={environmentCode}
+                      refData={refList}
+                      onChange={(newData) => {
+                        setEnvironmentCode(newData);
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+            <div>
+              <Collapse accordion items={items} />
+              <Row justify="end">
+                <Tooltip title="Add new file">
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon={<PlusCircleOutlined />}
+                    onClick={() => addItem()}
+                  />
+                </Tooltip>
+              </Row>
+              {/* {Object.values(itemsCode).join(' ')} */}
+              {/* {JSON.stringify(environmentCode)} */}
+            </div>
+          </MoveableContainer>
+        </div>
       </Space>
-      <div style={{ height: '20vh', width: '80vw' }}>
-        <div style={{ height: '100%' }} hidden={!advanceMode}>
-          {environmentCode && (
-            <Editor
-              code={JSON.stringify(environmentCode, null, 2)}
-              isDark={true}
-              language="json"
-              onChange={(newCode, validate) => {
-                setEnvironmentValidate(validate);
-                setEnvironmentCode(JSON.parse(newCode));
-              }}
-            />
-          )}
-        </div>
-        <div style={{ height: '100%', overflowY: 'auto' }}>
-          {!advanceMode && (
-            <NestedForm
-              data={environmentCode}
-              onChange={(newData) => {
-                setEnvironmentCode(newData);
-              }}
-            />
-          )}
-        </div>
-      </div>
-      <Collapse accordion items={items} />
-      <Row justify="end">
-        <Tooltip title="Add new file">
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<PlusCircleOutlined />}
-            onClick={() => addItem()}
-          />
-        </Tooltip>
-      </Row>
-      {/* {Object.values(itemsCode).join(' ')} */}
-      {JSON.stringify(environmentCode)}
-    </Space>
+    </>
   );
 }
 

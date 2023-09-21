@@ -1,0 +1,11 @@
+artifacts:
+  h2o-64-validation:
+    url: /data/home/whxu/data/water/label
+    includes: validation.xyz
+
+  h2o-64-train:
+    url: /data/home/whxu/data/water/train
+
+  h2o-64-explore:
+    url: /data/home/whxu/data/water/explore
+    includes: POSCAR-0000
