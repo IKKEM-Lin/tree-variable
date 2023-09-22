@@ -44,14 +44,16 @@ export const FileContent: FC<{
           />
         </div>
         <div style={{ width: '100%', marginTop: '5px', flexGrow: 1 }}>
-          <Editor
-            code={item.code}
-            isDark={true}
-            onChange={(code) => {
-              item.code = code;
-              onChange([...data]);
-            }}
-          />
+          <div style={{height: "calc(100% - 4px)"}}>
+            <Editor
+              code={item.code}
+              isDark={true}
+              onChange={(code) => {
+                item.code = code;
+                onChange([...data]);
+              }}
+            />
+          </div>
         </div>
       </div>
     ),
