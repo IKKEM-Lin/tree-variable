@@ -18,6 +18,7 @@ export async function getDetail(id?: string) {
   console.log(id)
   const files = [
     {
+      id: "1",
       fileName: 'artifact.yml',
       code: `artifacts:
       h2o-64-validation:
@@ -33,6 +34,7 @@ export async function getDetail(id?: string) {
     `,
     },
     {
+      id: "2",
       fileName: 'executor.yml',
       code: `executors:
       chenglab:
@@ -121,6 +123,7 @@ export async function getDetail(id?: string) {
     `,
     },
     {
+      id: "3",
       fileName: 'workflow.yml',
       code: `workflow:
       general:

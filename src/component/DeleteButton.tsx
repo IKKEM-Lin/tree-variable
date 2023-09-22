@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Button, Popconfirm } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 
 export const DeleteButton: FC<{ onConfirm: (evt: any) => void }> = ({
   onConfirm,
@@ -15,10 +15,12 @@ export const DeleteButton: FC<{ onConfirm: (evt: any) => void }> = ({
       cancelText="No"
     >
       <Button
-        // type="second"
+        type="text"
+        size="small"
+        rootClassName="delete-btn"
         danger
         shape="circle"
-        icon={<DeleteOutlined color="#a00" />}
+        icon={<CloseOutlined />}
         onClick={(evt) => {
           evt?.stopPropagation();
         }}

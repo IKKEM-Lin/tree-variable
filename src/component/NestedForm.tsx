@@ -9,7 +9,7 @@ import {
   Tree,
   Select,
 } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import type { DataNode } from 'antd/es/tree';
 import { DeleteButton } from './DeleteButton';
 import { getDetail } from '../service';
@@ -41,6 +41,7 @@ export const NestedForm: FC<{
       const currentKey = `${parentKey}-${ind}`;
       return {
         key: currentKey,
+        selectable: false,
         title: (
           <Row gutter={8}>
             <Col span={4}>
@@ -132,12 +133,12 @@ export const NestedForm: FC<{
         <Col span={8}>
           <Typography.Title level={5}>Value</Typography.Title>
         </Col>
-        <Col style={{ textAlign: 'right' }} span={5}>
+        <Col span={4}>
           <Tooltip title="Add new variable">
             <Button
               type="primary"
               shape="circle"
-              icon={<PlusCircleOutlined />}
+              icon={<PlusOutlined />}
               size="small"
               style={{ marginBottom: '8px' }}
               onClick={() =>

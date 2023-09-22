@@ -1,0 +1,15 @@
+.file-content-tabs {
+  height: 100%;
+}
+
+.file-content-tabs .ant-tabs-content {
+  height: 100%;
+}
+
+.file-content-tabs .ant-tabs-content > div {
+  height: 100%;
+}
+
+.file-content-tabs .delete-btn .anticon {
+  margin-right: 0;
+}
