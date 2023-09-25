@@ -11,6 +11,7 @@ import {
 import { IListItem } from './component/NestedForm';
 import { getList } from './service';
 import { Link  } from "react-router-dom";
+import "./App.css"
 
 // const cache: any = {};
 
@@ -34,15 +35,16 @@ function SettingList() {
   // }
 
   return (
-    <>
-      <Space direction="vertical" style={{ maxWidth: '1200px', width: '90vw' }}>
+    <Row justify="center" style={{marginTop: "20vh"}}>
+      <Space direction="vertical" style={{ maxWidth: '900px', width: '90vw' }}>
         <List
           itemLayout="horizontal"
           size="large"
           loading={loading}
+          rootClassName="setting-list"
           header={
             <Row justify="center">
-              <Col span={12}>
+              <Col span={18} sm={12}>
                 <Input.Search
                   placeholder="Input search text"
                   value={filterVal}
@@ -91,7 +93,7 @@ function SettingList() {
           )}
         />
       </Space>
-    </>
+    </Row>
   );
 }
 
