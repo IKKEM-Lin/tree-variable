@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  // Switch,
-  Button,
   Space,
   Typography,
   Row,
@@ -9,10 +7,9 @@ import {
   List,
   Input,
 } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+// import { DownOutlined } from '@ant-design/icons';
 import { IListItem } from './component/NestedForm';
 import { getList } from './service';
-import './App.css';
 
 // const cache: any = {};
 
