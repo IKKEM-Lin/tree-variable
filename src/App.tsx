@@ -19,12 +19,16 @@ import { FileContent, IFile } from './component/FileContent';
 import { BaseInfo, IBaseInfo } from './component/BaseInfo';
 import { getList, getDetail } from './service';
 import { MoveableContainer } from './component/MoveableContainer/MoveableContainer';
+import { useParams, useNavigate } from "react-router-dom";
 import "./App.css"
 
 // const cache: any = {};
 
 
 function App() {
+  const params = useParams();
+  const navigate = useNavigate();
+  const currentId = params.id || ""
   const [baseInfo, setBaseInfo] = useState<IBaseInfo>({
     title: '',
     description: '',
@@ -37,13 +41,13 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [layout, setLayout] = useState<'row' | 'col'>(localStorage.getItem("layout") as any || 'row');
 
-  console.log(environmentValidate);
+  console.log(environmentValidate, currentId);
   useEffect(() => {
     setLoading(true);
     getList().then((res) => {
       setRefList(res);
     });
-    getDetail().then(({ files, enviroments, title, description }) => {
+    getDetail(currentId).then(({ files, enviroments, title, description }) => {
       setBaseInfo({title, description})
       setFiles(files);
       setEnvironmentCode(enviroments);
@@ -114,6 +118,7 @@ function App() {
     console.log(baseInfo, environmentCode, files);
   };
   const handleCancle = () => {
+    navigate(-1)
     // console.log(baseInfo, environmentCode, files)
   };
 
