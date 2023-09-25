@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  Switch,
+  // Switch,
   Button,
   Space,
   Typography,
@@ -10,10 +10,9 @@ import {
   Popover,
 } from 'antd';
 import {
-  ColumnHeightOutlined,
-  ColumnWidthOutlined,
   DownOutlined,
 } from '@ant-design/icons';
+import {LayoutIcon} from "./component/LayoutIcon"
 import { Editor } from './component/Editor';
 import { NestedForm, IEnvironment, IListItem } from './component/NestedForm';
 import { FileContent, IFile } from './component/FileContent';
@@ -32,7 +31,7 @@ function App() {
   const [environmentCode, setEnvironmentCode] = useState<IEnvironment[]>([]);
   const [files, setFiles] = useState<IFile[]>([]);
   const [environmentValidate, setEnvironmentValidate] = useState(false);
-  const [advanceMode, setAdvanceMode] = useState(false);
+  const [advanceMode, _] = useState(false);
   const [loading, setLoading] = useState(false);
   const [layout, setLayout] = useState<'row' | 'col'>('row');
 
@@ -61,11 +60,12 @@ function App() {
     >
       <div style={{ height: 'calc(100% - 24px)' }}>
         <Space>
-          Advance Mode:
+          Environment Variable
+          {/* Advance Mode:
           <Switch
             checked={advanceMode}
             onChange={(checked) => setAdvanceMode(checked)}
-          />
+          /> */}
         </Space>
         <div style={{ height: '100%' }}>
           <div style={{ height: '100%' }} hidden={!advanceMode}>
@@ -104,6 +104,13 @@ function App() {
     </MoveableContainer>
   );
 
+  const handleSave = () => {
+    console.log(baseInfo, environmentCode, files);
+  };
+  const handleCancle = () => {
+    // console.log(baseInfo, environmentCode, files)
+  };
+
   return (
     <>
       <Space direction="vertical" style={{ maxWidth: '1200px', width: '90vw' }}>
@@ -115,10 +122,10 @@ function App() {
               onChange={(evt) => setLayout(evt.target.value)}
             >
               <Radio.Button value="row">
-                <ColumnWidthOutlined />
+                <LayoutIcon size={20} rotate={90} />
               </Radio.Button>
               <Radio.Button value="col">
-                <ColumnHeightOutlined />
+                <LayoutIcon size={20} rotate={0} />
               </Radio.Button>
             </Radio.Group>
           </Col>
@@ -142,8 +149,10 @@ function App() {
           </Col>
           <Col>
             <Space>
-              <Button type="primary">Save</Button>
-              <Button>Cancel</Button>
+              <Button type="primary" onClick={handleSave}>
+                Save
+              </Button>
+              <Button onClick={handleCancle}>Cancel</Button>
             </Space>
           </Col>
         </Row>
