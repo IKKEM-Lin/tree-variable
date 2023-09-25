@@ -2,20 +2,34 @@ export async function getList() {
   const res = [
     {
       title: 'config1',
+      description: "config1 description",
       files: ['cp2k.inp'],
       id: '1',
     },
     {
       title: 'config2',
-      files: [],
+      description: "config2 description",
+      files: ['file1.json', 'file2.json'],
       id: '2',
+    },
+    {
+      title: 'config3',
+      description: "config2 description",
+      files: ['file1.json', 'file2.json'],
+      id: '3',
+    },
+    {
+      title: 'config4',
+      description: "config2 description",
+      files: ['file1.json', 'file2.json'],
+      id: '4',
     },
   ];
   return res;
 }
 
 export async function getDetail(id?: string) {
-  console.log(id)
+  // console.log(id)
   const files = [
     {
       id: "1",
@@ -241,5 +255,6 @@ export async function getDetail(id?: string) {
     },
     { name: 'v3', type: 'path', value: './local/temp.dump' },
   ];
-  return { files, enviroments };
+  
+  return { files, enviroments, id, title: "test", description: "test description" };
 }

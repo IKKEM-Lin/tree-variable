@@ -19,8 +19,10 @@ import { FileContent, IFile } from './component/FileContent';
 import { BaseInfo, IBaseInfo } from './component/BaseInfo';
 import { getList, getDetail } from './service';
 import { MoveableContainer } from './component/MoveableContainer/MoveableContainer';
+import "./App.css"
 
 // const cache: any = {};
+
 
 function App() {
   const [baseInfo, setBaseInfo] = useState<IBaseInfo>({
@@ -33,7 +35,7 @@ function App() {
   const [environmentValidate, setEnvironmentValidate] = useState(false);
   const [advanceMode, _] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [layout, setLayout] = useState<'row' | 'col'>('row');
+  const [layout, setLayout] = useState<'row' | 'col'>(localStorage.getItem("layout") as any || 'row');
 
   console.log(environmentValidate);
   useEffect(() => {
@@ -41,13 +43,17 @@ function App() {
     getList().then((res) => {
       setRefList(res);
     });
-    getDetail().then(({ files, enviroments }) => {
-      const newEnviroment: IEnvironment[] = enviroments;
+    getDetail().then(({ files, enviroments, title, description }) => {
+      setBaseInfo({title, description})
       setFiles(files);
-      setEnvironmentCode(newEnviroment);
+      setEnvironmentCode(enviroments);
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("layout", layout)
+  }, [layout])
 
   if (loading) {
     return <></>;
@@ -114,7 +120,7 @@ function App() {
   return (
     <>
       <Space direction="vertical" style={{ maxWidth: '1200px', width: '90vw' }}>
-        <Row align="bottom" justify="space-between">
+        <Row className="header-bar" align="bottom" justify="space-between">
           <Col>
             <Radio.Group
               value={layout}

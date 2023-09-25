@@ -23,6 +23,7 @@ export interface IEnvironment {
 
 export interface IListItem {
   title: string;
+  description: string;
   id: string;
   files?: string[];
 }
