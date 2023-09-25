@@ -89,12 +89,24 @@ export const NestedForm: FC<{
                 <Select
                   value={item.value}
                   style={{ width: '100%' }}
+                  showSearch
                   onChange={async (val) => {
                     item.value = val;
                     const newChildren = await getDetail(val);
                     item.children = [...newChildren.enviroments];
                     onChange([...data]);
                   }}
+                  optionFilterProp="label"
+                  filterOption={(input, option) =>
+                    (option?.label ?? '')
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.label ?? '')
+                      .toLowerCase()
+                      .localeCompare((optionB?.label ?? '').toLowerCase())
+                  }
                   disabled={offset > 0}
                   options={refData.map((item) => ({
                     value: item.id,
