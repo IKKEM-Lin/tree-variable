@@ -10,6 +10,7 @@ import {
 // import { DownOutlined } from '@ant-design/icons';
 import { IListItem } from './component/NestedForm';
 import { getList } from './service';
+import { Link  } from "react-router-dom";
 
 // const cache: any = {};
 
@@ -73,13 +74,13 @@ function SettingList() {
           renderItem={(item) => (
             <List.Item
               actions={[
-                <a key="list-edit" href={`/${item.id}`}>
+                <Link key="list-edit" to={`/${item.id}`}>
                   Edit
-                </a>,
+                </Link>,
               ]}
             >
               <List.Item.Meta
-                title={<a href={`/${item.id}`}>{item.title}</a>}
+                title={<Link to={`/${item.id}`}>{item.title}</Link>}
                 description={
                   <Typography.Text style={{ color: 'inherit' }} ellipsis>
                     {item.description}
