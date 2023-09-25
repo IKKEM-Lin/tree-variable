@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
   Switch,
-  Input,
   Button,
   Space,
   Typography,
@@ -10,7 +9,11 @@ import {
   Radio,
   Popover,
 } from 'antd';
-import { ColumnHeightOutlined, ColumnWidthOutlined, DownOutlined } from '@ant-design/icons';
+import {
+  ColumnHeightOutlined,
+  ColumnWidthOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 import { Editor } from './component/Editor';
 import { NestedForm, IEnvironment, IListItem } from './component/NestedForm';
 import { FileContent, IFile } from './component/FileContent';
@@ -21,7 +24,10 @@ import { MoveableContainer } from './component/MoveableContainer/MoveableContain
 // const cache: any = {};
 
 function App() {
-  const [baseInfo, setBaseInfo] = useState<IBaseInfo>({title: "", description: ""});
+  const [baseInfo, setBaseInfo] = useState<IBaseInfo>({
+    title: '',
+    description: '',
+  });
   const [refList, setRefList] = useState<IListItem[]>([]);
   const [environmentCode, setEnvironmentCode] = useState<IEnvironment[]>([]);
   const [files, setFiles] = useState<IFile[]>([]);
@@ -30,6 +36,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [layout, setLayout] = useState<'row' | 'col'>('row');
 
+  console.log(environmentValidate);
   useEffect(() => {
     setLoading(true);
     getList().then((res) => {
@@ -102,23 +109,33 @@ function App() {
       <Space direction="vertical" style={{ maxWidth: '1200px', width: '90vw' }}>
         <Row align="bottom" justify="space-between">
           <Col>
-              <Radio.Group
-                value={layout}
-                buttonStyle="solid"
-                onChange={(evt) => setLayout(evt.target.value)}
-              >
-                <Radio.Button value="row">
-                  <ColumnWidthOutlined />
-                </Radio.Button>
-                <Radio.Button value="col">
-                  <ColumnHeightOutlined />
-                </Radio.Button>
-              </Radio.Group>
+            <Radio.Group
+              value={layout}
+              buttonStyle="solid"
+              onChange={(evt) => setLayout(evt.target.value)}
+            >
+              <Radio.Button value="row">
+                <ColumnWidthOutlined />
+              </Radio.Button>
+              <Radio.Button value="col">
+                <ColumnHeightOutlined />
+              </Radio.Button>
+            </Radio.Group>
           </Col>
           <Col>
-            <Popover trigger="click" content={<BaseInfo data={baseInfo} onChange={newData => setBaseInfo(newData)}  />}>
+            <Popover
+              trigger="click"
+              content={
+                <BaseInfo
+                  data={baseInfo}
+                  onChange={(newData) => setBaseInfo(newData)}
+                />
+              }
+            >
               <Button type="text">
-                <Typography.Text strong>{baseInfo.title || '(Empty)'}</Typography.Text>
+                <Typography.Text strong>
+                  {baseInfo.title || '(Empty)'}
+                </Typography.Text>
                 <DownOutlined />
               </Button>
             </Popover>

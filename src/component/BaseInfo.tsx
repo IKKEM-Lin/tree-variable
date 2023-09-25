@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Input, Form, Space } from 'antd';
+import { Input, Form } from 'antd';
 
 export interface IBaseInfo {
   title: string;

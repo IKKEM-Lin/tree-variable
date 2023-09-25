@@ -1,10 +1,9 @@
 import MonacoEditor, {
   loader,
-  useMonaco,
   DiffEditor,
 } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
-import { editor, Uri } from 'monaco-editor';
+import { editor } from 'monaco-editor';
 import { useEffect, useRef, useState } from 'react';
 
 loader.config({ monaco });
@@ -33,7 +32,6 @@ const monacoEditorOptions: editor.IStandaloneEditorConstructionOptions = {
 export function Editor({
   code,
   onChange,
-  schema,
   diffView,
   isDark,
   language,
